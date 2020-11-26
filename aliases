@@ -1,0 +1,4 @@
+alias plb-reset='make'
+alias plb-start='docker-compose up&'
+alias plb-stop='docker-compose stop'
+alias plb-clean='docker-compose rm -sf'

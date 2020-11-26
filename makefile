@@ -4,17 +4,17 @@ DC=docker-compose
 DE=docker exec
 B=build
 LOCAL=.env.local
-VAR=/var/www/var
+VAR=/var/www
 WWW=www-data
 EXEC=install
 
 all: $(EXEC)
 
-install: initialisation 
-	$(DE) php.plb $(OWN) -R $(WWW):$(WWW) $(VAR)
-	$(DE) php.plb sed -i 's/APP_DEBUG\=0/APP_DEBUG\=1' .env.local
+install : initialisation
+
 initialisation : dockerup
-	$(DE) -it php.plb ./install.sh
+	$(DE) -it php.plb bash -c 'zcat ./data/planningb_1911_utf8.sql.gz | mysql -h mariadb.plb -uroot -pbiblibre planningbiblio'
+	$(DE) -it mariadb.plb mysql -uroot -pbiblibre planningbiblio -e 'update personnel set password=md5("test") where id=1'
 
 dockerup : docker 
 	$(DC) up -d 
@@ -24,4 +24,3 @@ docker : adduser
 
 adduser :
 	sudo usermod -aG docker $$USER
-
