@@ -14,5 +14,4 @@ RUN docker-php-ext-install calendar ldap json pdo pdo_mysql mysqli && docker-php
 ADD ./docker/get_composer.sh .
 RUN ./get_composer.sh
 RUN mv composer.phar /usr/bin/composer
-
-
+CMD: ['./clean-install.sh']

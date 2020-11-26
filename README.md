@@ -17,11 +17,17 @@
 git clone https://github.com/PlanningBiblio/PlanningBiblio.git
 ```
 
+Il vous faudra aussi obtenir une copie à jour de Plb-Docker
+
+```bash
+git clone https://github.com/sillydebs/plb-docker.git
+```
+
 ### 1. Rendez-vous à la racine de votre projet depuis votre terminal
 
- ```bash
- cd PlanningBiblio/
- ```
+```bash
+cd plb-docker
+```
 
 ### 2. Vérifiez que les fichiers et répertoires suivants sont présents à la racine de votre projet
 
@@ -29,51 +35,42 @@ git clone https://github.com/PlanningBiblio/PlanningBiblio.git
 - [ ] les fichiers
 	- [ ] docker-compose.yml
 	- [ ] Dockerfile-php
-	- [ ] makefile
+	- [ ] aliases
+        - [ ] .env
 
-Pour vérifier leur présence, entrez la commande ls
- ```bash
- votresession@votremachine:~/PlanningBiblio$ ls
- ```
-
-Si les fichiers ne sont pas présents dans votre répertoire, il suffira de les importer depuis ce git, puis de les déplacer avec la commande mv. On finira par la suppression du répertoire plb-docker une fois vidé.
-
+Pour vérifier leur présence, entrez la commande ls -lah
 ```bash
-git clone https://github.com/sillydebs/plb-docker.git
-mv plb-docker/makefile ./makefile
-mv plb-docker/Dockerfile-php ./Dockerfile-php
-mv plb-docker/docker-compose.yml ./docker-compose.yml
-mv plb-docker/docker ./docker
-rm -rf plb-docker
+votresession@votremachine:~/plb-docker$ ls -lah
 ```
 
-### 3. Depuis la racine de votre projet, lancez make depuis votre terminal
-
+### 3. Mettez en place les aliases
 ```bash
-votresession@votremachine:~/PlanningBiblio$ make
+votresession@votremachine:~/plb-docker$ echo "export PLB_DOCKER_HOME=$PWD" >> ~/.bashrc
+votresession@votremachine:~/plb-docker$ echo 'source $PLB_DOCKER_HOME/aliases' >> ~/.bashrc
+votresession@votremachine:~/plb-docker$ source ~/.bashrc
 ```
 
-Le fichier makefile contient toutes les instructions nécessaires pour installer l'image Docker dont vous aurez besoin en local.
+Ces aliases vous permettrons de rapidement démarrer, arréter ou remettre à zéro votre installation PLB pour les test.
+
+ * plb-start : démarre PLB
+ * plb-stop : coupe les vm, les données sont sauvegardées jusqu'au prochain start.
+ * plb-clean : supprime les machines virtuelles (mais pas de panique, tout est recréé avec plb-start)
 
 Il fera lui-même appel au fichier *docker-compose.yml*, pour installer les services requis et à *Dockerfile-php* pour créer l'image php nécessaire au chargement de PlanningBiblio.
 
-### 4. Paramétrez votre projet
+### 4. Démarrer PlanningBiblio!
 
-Au lancement de install.sh, vous devrez interagir depuis votre terminal pour paramétrer votre base de données.
+Si vous avez mis en place les alias, vous pouvez simplement taper:
+```bash
+votresession@votremachine:~/$ plb-start
+```
 
-Voici les informations à entrer* :
- **Si vous ne voyez pas un champ dans cette liste, appuyez sur Entrée, cela entrera la valeur par défaut.*
- 
-- DB HOST : le domaine de la base de données
-	- si vous voulez utiliser votre propre base de données, entrez votre domaine
-	- si vous n'avez pas de base de données, entrez mariadb.plb
-- DB Admin User : root
-- DB Admin Pass : biblibre *(si vous souhaitez utiliser mariadb.plb)*
-- DB User : planningbadmin *(si vous souhaitez utiliser mariadb.plb)*
-- DB Pass : DEVplb21 *(si vous souhaitez utiliser mariadb.plb)*
-- DB Name : planningbiblio
-- Planning Biblio admin's password : DEVplb21
+Sinon :
+```bash
+votresession@votremachine:~/plb-docker$ docker-compose up
+```
 
-Chargez la page localhost depuis votre navigateur préféré : la page d'accueil de PlanningBiblio s'ouvre !
+Quelques secondes plus tard vous pouvez vous connecter sur http://localhost et accéder à PlanningBiblio!
+Les login et mot de passe par défaut sont "admin / test".
 
 Bonne continuation avec Docker et PlanningBiblio !

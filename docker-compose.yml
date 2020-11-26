@@ -7,10 +7,11 @@ services :
     build:
       context: ./
       dockerfile: Dockerfile-php
-    depends_on:
+    links:
       - mariadb
     volumes:
       - ./docker/.env.local:/var/www/.env.local
+      - ./docker/clean-install.sh:/var/www/clean-install.sh
       - ${PLB_REPO}:/var/www
     environment:
       APP_ENV: dev
